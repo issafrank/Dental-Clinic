@@ -1,0 +1,75 @@
+/* ================================================================
+   Global dark-mode overrides
+   Automatically retheme common Tailwind utility classes when the
+   `dark` class is present on <html>. This avoids having to add
+   `dark:` variants on every single element.
+   ================================================================ */
+@layer base {
+  /* Tell the browser to render native form controls + scrollbars
+     in dark style. This is what removes the bright white scrollbar. */
+  html       { color-scheme: light; }
+  html.dark  { color-scheme: dark; }
+
+  /* Headings without explicit color get a bright tone in dark mode */
+  .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 { color: rgb(248 250 252); } /* slate-50 */
+
+  /* Text colors */
+  .dark .text-slate-900 { color: rgb(248 250 252); }    /* slate-50  (strong) */
+  .dark .text-slate-800 { color: rgb(241 245 249); }    /* slate-100 */
+  .dark .text-slate-700 { color: rgb(226 232 240); }    /* slate-200 */
+  .dark .text-slate-600 { color: rgb(203 213 225); }    /* slate-300 */
+  .dark .text-slate-500 { color: rgb(148 163 184); }    /* slate-400 */
+  .dark .text-slate-400 { color: rgb(148 163 184); }    /* slate-400 */
+
+  /* Backgrounds */
+  .dark .bg-white       { background-color: rgb(30 41 59); }   /* slate-800 */
+  .dark .bg-slate-50    { background-color: rgb(15 23 42); }   /* slate-900 */
+  .dark .bg-slate-100   { background-color: rgb(30 41 59); }   /* slate-800 */
+
+  /* Hover backgrounds commonly used for row hover */
+  .dark .hover\:bg-slate-50:hover  { background-color: rgb(51 65 85 / 0.4); }  /* slate-700/40 */
+  .dark .hover\:bg-slate-100:hover { background-color: rgb(51 65 85 / 0.5); }
+
+  /* Borders and rings (light variants -> darker equivalents) */
+  .dark .border-slate-100 { border-color: rgb(51 65 85); }      /* slate-700 */
+  .dark .border-slate-200 { border-color: rgb(51 65 85); }
+  .dark .border-slate-300 { border-color: rgb(71 85 105); }     /* slate-600 */
+  .dark .ring-slate-100   { --tw-ring-color: rgb(51 65 85); }
+  .dark .ring-slate-200   { --tw-ring-color: rgb(51 65 85); }
+
+  /* Dividers */
+  .dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]),
+  .dark .divide-slate-200 > :not([hidden]) ~ :not([hidden]) {
+    border-color: rgb(51 65 85); /* slate-700 */
+  }
+
+  /* Gradients that used slate in light mode */
+  .dark .from-slate-50   { --tw-gradient-from: rgb(15 23 42) var(--tw-gradient-from-position); --tw-gradient-to: rgb(15 23 42 / 0) var(--tw-gradient-to-position); --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to); }
+  .dark .to-slate-100    { --tw-gradient-to: rgb(30 41 59) var(--tw-gradient-to-position); }
+
+  /* Placeholder */
+  .dark .placeholder\:text-slate-400::placeholder { color: rgb(100 116 139); }
+
+  /* Force document-level scrollbar to match dark theme (Chromium/WebKit) */
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar              { width: 14px; height: 14px; }
+  html::-webkit-scrollbar-track,
+  body::-webkit-scrollbar-track        { background: rgb(241 245 249); }
+  html::-webkit-scrollbar-thumb,
+  body::-webkit-scrollbar-thumb        { background: rgb(203 213 225); border-radius: 9999px; }
+  html::-webkit-scrollbar-thumb:hover,
+  body::-webkit-scrollbar-thumb:hover  { background: rgb(148 163 184); }
+
+  html.dark::-webkit-scrollbar-track,
+  html.dark body::-webkit-scrollbar-track        { background: rgb(2 6 23) !important; }       /* slate-950 */
+  html.dark::-webkit-scrollbar-thumb,
+  html.dark body::-webkit-scrollbar-thumb        { background: rgb(51 65 85) !important; }     /* slate-700 */
+  html.dark::-webkit-scrollbar-thumb:hover,
+  html.dark body::-webkit-scrollbar-thumb:hover  { background: rgb(71 85 105) !important; }    /* slate-600 */
+  html.dark::-webkit-scrollbar-corner,
+  html.dark body::-webkit-scrollbar-corner       { background: rgb(2 6 23) !important; }
+
+  /* Firefox + Chromium 121+ standard property */
+  html       { scrollbar-color: rgb(203 213 225) rgb(241 245 249); }
+  html.dark  { scrollbar-color: rgb(51 65 85) rgb(2 6 23) !important; }
+}

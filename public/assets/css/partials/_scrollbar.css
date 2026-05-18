@@ -1,0 +1,22 @@
+/* ================================================================
+   Native scrollbar theming (light + dark)
+   Placed OUTSIDE @layer so it isn't swallowed by Tailwind's cascade.
+   ================================================================ */
+html       { color-scheme: light; scrollbar-color: rgb(203 213 225) rgb(241 245 249); }
+html.dark  { color-scheme: dark;  scrollbar-color: rgb(51 65 85) rgb(2 6 23); }
+
+html::-webkit-scrollbar              { width: 14px; height: 14px; }
+html::-webkit-scrollbar-track        { background: rgb(241 245 249); }
+html::-webkit-scrollbar-thumb        { background: rgb(203 213 225); border-radius: 9999px; }
+html::-webkit-scrollbar-thumb:hover  { background: rgb(148 163 184); }
+
+html.dark::-webkit-scrollbar-track       { background: rgb(2 6 23); }
+html.dark::-webkit-scrollbar-thumb       { background: rgb(51 65 85); }
+html.dark::-webkit-scrollbar-thumb:hover { background: rgb(71 85 105); }
+html.dark::-webkit-scrollbar-corner      { background: rgb(2 6 23); }
+
+@layer utilities {
+  /* Hide scrollbar but keep scrolling functional */
+  .no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+}

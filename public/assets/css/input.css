@@ -1,0 +1,29 @@
+/* ================================================================
+   Tailwind entry point.
+   This file is processed by `npm run build` (or `npm run dev`) and
+   compiled into ./app.css. DO NOT edit ./app.css directly — it is
+   the minified output and gets regenerated.
+
+   Organization:
+     - Tailwind directives below pull in the framework's base,
+       component, and utility layers.
+     - Component-specific styles live in ./partials/ and are imported
+       below. Add new files there (e.g. `_topbar.css`) and import
+       them here.
+
+   Note: most styling lives in HTML/PHP markup as Tailwind utility
+   classes. CSS files here are only for:
+     1. Reusable component primitives via @apply (see _components.css)
+     2. Behaviors utilities can't express (animations, state-based
+        rules like sidebar collapse, scrollbar theming, etc.)
+   ================================================================ */
+/* @import statements MUST come before any other rules (CSS spec).
+   postcss-import inlines these at build time. */
+@import "./partials/_scrollbar.css";
+@import "./partials/_dark-mode.css";
+@import "./partials/_sidebar.css";
+@import "./partials/_components.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

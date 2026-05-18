@@ -1,0 +1,104 @@
+/* ================================================================
+   Sidebar layout, collapse animation, and rail-mode tooltips.
+   Triggered by either:
+     - `.is-collapsed` on .sidebar / .main-content (runtime toggle)
+     - `[data-sidebar-collapsed="1"]` on <html> (persisted across page
+       loads; set pre-paint by the inline script in head.php)
+   ================================================================ */
+@layer utilities {
+  /* Smooth transitions for sidebar width/transform and main margin */
+  .sidebar {
+    transition: transform 300ms ease-out, width 300ms ease-out;
+    will-change: transform, width;
+  }
+  .main-content {
+    transition: margin-left 300ms ease-out;
+    will-change: margin-left;
+  }
+
+  /* Fade labels/section titles/brand text/footer details when collapsing */
+  [data-sidebar-label],
+  [data-sidebar-section-title],
+  [data-sidebar-brand-text],
+  [data-sidebar-footer-details] {
+    transition: opacity 180ms ease-out;
+  }
+
+  /* Mobile (default): collapsed = fully hidden (slides out) */
+  .sidebar.is-collapsed,
+  html[data-sidebar-collapsed="1"] .sidebar { transform: translateX(-100%); }
+  .main-content.is-collapsed,
+  html[data-sidebar-collapsed="1"] .main-content { margin-left: 0 !important; }
+
+  /* Tooltips inside sidebar are hidden by default; shown only in rail mode */
+  [data-sidebar-tooltip] { display: none; }
+
+  /* Desktop (md+): collapsed = narrow rail (icons only) with tooltips */
+  @media (min-width: 768px) {
+    .sidebar.is-collapsed,
+    html[data-sidebar-collapsed="1"] .sidebar {
+      transform: translateX(0);
+      width: 4rem;
+    }
+    .main-content.is-collapsed,
+    html[data-sidebar-collapsed="1"] .main-content { margin-left: 4rem !important; }
+
+    /* Fade out text labels, section headers, brand text, and footer details
+       and remove them from layout once the fade completes so they don't take
+       width while the sidebar is shrinking. */
+    .sidebar.is-collapsed [data-sidebar-label],
+    .sidebar.is-collapsed [data-sidebar-section-title],
+    .sidebar.is-collapsed [data-sidebar-brand-text],
+    .sidebar.is-collapsed [data-sidebar-footer-details],
+    html[data-sidebar-collapsed="1"] [data-sidebar-label],
+    html[data-sidebar-collapsed="1"] [data-sidebar-section-title],
+    html[data-sidebar-collapsed="1"] [data-sidebar-brand-text],
+    html[data-sidebar-collapsed="1"] [data-sidebar-footer-details] {
+      opacity: 0;
+      pointer-events: none;
+      width: 0;
+      min-width: 0;
+      max-width: 0;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    /* Center nav item icons, brand, and footer avatar.
+       gap: 0 is critical: even though hidden labels have width:0, the flex
+       `gap-3` would still inject 12px of phantom space between items,
+       pushing the visible icon off-center to the left. */
+    .sidebar.is-collapsed [data-sidebar-row],
+    html[data-sidebar-collapsed="1"] [data-sidebar-row] {
+      justify-content: center;
+      gap: 0;
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+    }
+
+    /* Flatten the footer in rail mode so the avatar sits centered and
+       lines up visually with the nav icons (no card bg, no nested padding). */
+    .sidebar.is-collapsed [data-sidebar-footer],
+    html[data-sidebar-collapsed="1"] [data-sidebar-footer] {
+      padding-left: 0;
+      padding-right: 0;
+    }
+    .sidebar.is-collapsed [data-sidebar-footer-row],
+    html[data-sidebar-collapsed="1"] [data-sidebar-footer-row] {
+      background-color: transparent;
+      box-shadow: none;
+      --tw-ring-shadow: 0 0 #0000;
+      padding-top: 0.25rem;
+      padding-bottom: 0.25rem;
+    }
+
+    /* Show tooltips only in rail mode */
+    .sidebar.is-collapsed [data-sidebar-tooltip],
+    html[data-sidebar-collapsed="1"] [data-sidebar-tooltip] { display: inline-flex; }
+
+    /* In rail mode, allow tooltips to escape the scroll container */
+    .sidebar.is-collapsed nav,
+    html[data-sidebar-collapsed="1"] .sidebar nav { overflow: visible; }
+  }
+}

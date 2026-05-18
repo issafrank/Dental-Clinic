@@ -1,0 +1,17 @@
+{
+  "name": "capstone2/dental-clinic",
+  "description": "Dental Clinic Management System (vanilla PHP).",
+  "type": "project",
+  "require": {
+    "php": ">=8.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/"
+    },
+    "files": [
+      "app/Helpers/functions.php",
+      "app/Helpers/dates.php"
+    ]
+  }
+}

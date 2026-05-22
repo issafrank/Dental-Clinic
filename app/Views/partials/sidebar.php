@@ -26,7 +26,7 @@ $sectionsByRole = [
             ['/settings',     'Settings',     'cog'],
         ],
     ],
-    'doctor' => [
+    'dentist' => [
         'Main' => [
             ['/dashboard',    'Dashboard',     'home'],
             ['/appointments', 'My Schedule',   'calendar'],
@@ -97,10 +97,12 @@ $u = auth();
     </a>
 
     <!-- Nav -->
-    <nav class="no-scrollbar flex-1 overflow-y-auto px-3 py-4">
+    <nav class="flex-1 overflow-hidden px-3 py-4">
         <?php foreach ($sections as $title => $links): ?>
             <div class="mb-4">
-                <p data-sidebar-section-title class="px-3 pb-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-500"><?= e($title) ?></p>
+                <?php if ($title !== 'Main'): ?>
+                    <p data-sidebar-section-title class="px-3 pb-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-500"><?= e($title) ?></p>
+                <?php endif; ?>
                 <div class="space-y-0.5">
                     <?php foreach ($links as [$href, $label, $ic]):
                         $active = $current === $href || str_starts_with($current, rtrim($href, '/') . '/');

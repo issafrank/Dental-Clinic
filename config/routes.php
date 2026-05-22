@@ -1,8 +1,5 @@
 <?php
 /**
- * FRONTEND-ONLY ROUTES.
- * No middleware, no auth, no DB. Mock data lang.
- *
  * @var App\Core\Router $router
  */
 
@@ -21,45 +18,55 @@ use App\Controllers\ServiceController;
 use App\Controllers\ReportController;
 use App\Controllers\SettingsController;
 use App\Controllers\ProfileController;
+use App\Middleware\AuthMiddleware;
+use App\Middleware\CsrfMiddleware;
 
-// Public landing page
-$router->get('/',          [LandingController::class, 'index']);
-$router->get('/dashboard', [DashboardController::class, 'index']);
+// -----------------------------------------------------------------------
+// Public routes (no auth required)
+// -----------------------------------------------------------------------
+$router->get('/',         [LandingController::class, 'index']);
+$router->get('/login',    [AuthController::class, 'showLogin']);
+$router->get('/register', [AuthController::class, 'showRegister']);
 
-// Auth (UI only; logout just redirects home)
-$router->get('/login',     [AuthController::class, 'showLogin']);
-$router->get('/register',  [AuthController::class, 'showRegister']);
-$router->post('/logout',   [AuthController::class, 'logout']);
+$router->post('/login',   [AuthController::class, 'login'],  [CsrfMiddleware::class]);
+$router->post('/logout',  [AuthController::class, 'logout'], [CsrfMiddleware::class]);
+
+// -----------------------------------------------------------------------
+// Authenticated routes
+// -----------------------------------------------------------------------
+$auth = [AuthMiddleware::class];
+
+$router->get('/dashboard', [DashboardController::class, 'index'], $auth);
 
 // Patients
-$router->get('/patients',           [PatientController::class, 'index']);
-$router->get('/patients/create',    [PatientController::class, 'create']);
-$router->get('/patients/{id}',      [PatientController::class, 'show']);
-$router->get('/patients/{id}/edit', [PatientController::class, 'edit']);
-$router->get('/patients/{id}/dental-chart', [DentalChartController::class, 'show']);
+$router->get('/patients',                       [PatientController::class, 'index'],  $auth);
+$router->get('/patients/create',                [PatientController::class, 'create'], $auth);
+$router->get('/patients/{id}',                  [PatientController::class, 'show'],   $auth);
+$router->get('/patients/{id}/edit',             [PatientController::class, 'edit'],   $auth);
+$router->get('/patients/{id}/dental-chart',     [DentalChartController::class, 'show'], $auth);
 
 // Appointments
-$router->get('/appointments',           [AppointmentController::class, 'index']);
-$router->get('/appointments/create',    [AppointmentController::class, 'create']);
-$router->get('/appointments/{id}',      [AppointmentController::class, 'show']);
-$router->get('/appointments/{id}/edit', [AppointmentController::class, 'edit']);
+$router->get('/appointments',           [AppointmentController::class, 'index'],  $auth);
+$router->get('/appointments/create',    [AppointmentController::class, 'create'], $auth);
+$router->get('/appointments/{id}',      [AppointmentController::class, 'show'],   $auth);
+$router->get('/appointments/{id}/edit', [AppointmentController::class, 'edit'],   $auth);
 
 // Dentists / Staff
-$router->get('/dentists',        [DentistController::class, 'index']);
-$router->get('/dentists/create', [DentistController::class, 'create']);
-$router->get('/staff',           [StaffController::class, 'index']);
-$router->get('/staff/create',    [StaffController::class, 'create']);
+$router->get('/dentists',        [DentistController::class, 'index'],  $auth);
+$router->get('/dentists/create', [DentistController::class, 'create'], $auth);
+$router->get('/staff',           [StaffController::class, 'index'],    $auth);
+$router->get('/staff/create',    [StaffController::class, 'create'],   $auth);
 
 // Treatments / Services
-$router->get('/treatments',      [TreatmentController::class, 'index']);
-$router->get('/services',        [ServiceController::class, 'index']);
+$router->get('/treatments', [TreatmentController::class, 'index'], $auth);
+$router->get('/services',   [ServiceController::class, 'index'],   $auth);
 
 // Billing
-$router->get('/billing',         [BillingController::class, 'index']);
-$router->get('/billing/{id}',    [BillingController::class, 'show']);
+$router->get('/billing',      [BillingController::class, 'index'], $auth);
+$router->get('/billing/{id}', [BillingController::class, 'show'],  $auth);
 
 // Inventory / Reports / Settings / Profile
-$router->get('/inventory',       [InventoryController::class, 'index']);
-$router->get('/reports',         [ReportController::class, 'index']);
-$router->get('/settings',        [SettingsController::class, 'index']);
-$router->get('/profile',         [ProfileController::class, 'edit']);
+$router->get('/inventory', [InventoryController::class, 'index'], $auth);
+$router->get('/reports',   [ReportController::class, 'index'],    $auth);
+$router->get('/settings',  [SettingsController::class, 'index'],  $auth);
+$router->get('/profile',   [ProfileController::class, 'edit'],    $auth);

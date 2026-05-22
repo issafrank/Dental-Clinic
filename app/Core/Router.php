@@ -29,11 +29,44 @@ class Router
     public function dispatch(string $method, string $uri): void
     {
         // Strip the script subfolder (e.g. /capstone2/public) when not using vhost.
-        $base = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '')), '/');
-        if ($base !== '' && str_starts_with($uri, $base)) {
-            $uri = substr($uri, strlen($base));
+        $candidates = array_unique([
+            rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '')), '/'),
+            rtrim(str_replace('\\', '/', dirname($_SERVER['PHP_SELF'] ?? '')), '/'),
+        ]);
+        foreach ($candidates as $base) {
+            if ($base !== '' && str_starts_with($uri, $base)) {
+                $uri = substr($uri, strlen($base));
+                break;
+            }
         }
         $uri = '/' . trim($uri, '/');
+
+        // Normalize common front-controller paths.
+        if ($uri === '/index.php') {
+            $uri = '/';
+        } elseif (str_starts_with($uri, '/index.php/')) {
+            $uri = '/' . ltrim(substr($uri, strlen('/index.php')), '/');
+        }
+
+        // Fallback when the URL explicitly includes /public (common in local setups).
+        if ($uri === '/public' || $uri === '/public/index.php') {
+            $uri = '/';
+        } elseif (str_starts_with($uri, '/public/index.php/')) {
+            $uri = '/' . ltrim(substr($uri, strlen('/public/index.php')), '/');
+        } elseif (str_starts_with($uri, '/public/')) {
+            $uri = '/' . ltrim(substr($uri, strlen('/public')), '/');
+        } else {
+            // When /public exists later in the URI (e.g. /app/public/dashboard).
+            $publicIndexPos = strpos($uri, '/public/index.php/');
+            if ($publicIndexPos !== false) {
+                $uri = '/' . ltrim(substr($uri, $publicIndexPos + strlen('/public/index.php')), '/');
+            } else {
+                $publicPos = strpos($uri, '/public/');
+                if ($publicPos !== false) {
+                    $uri = '/' . ltrim(substr($uri, $publicPos + strlen('/public')), '/');
+                }
+            }
+        }
 
         // Method override via _method form field.
         if ($method === 'POST' && !empty($_POST['_method'])) {

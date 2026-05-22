@@ -37,32 +37,3 @@ require BASE_PATH . '/app/Helpers/mock_data.php';
 // --- Session ---------------------------------------------------------------
 App\Core\Session::start();
 
-// --- FRONTEND-ONLY MODE ----------------------------------------------------
-// Mock users per role. Switch via `?role=admin|doctor|staff|patient` in the
-// URL (persisted in session). Remove later when real auth is wired up.
-$mockUsers = [
-    'admin' => [
-        'id' => 1, 'name' => 'Demo Admin', 'email' => 'admin@clinic.local',
-        'role' => 'admin', 'phone' => '+63 900 000 0000',
-    ],
-    'doctor' => [
-        'id' => 2, 'name' => 'Jane Cruz', 'email' => 'jane@clinic.local',
-        'role' => 'doctor', 'phone' => '+63 917 100 1001', 'specialty' => 'Orthodontics',
-    ],
-    'staff' => [
-        'id' => 3, 'name' => 'Rosa Lim', 'email' => 'rosa@clinic.local',
-        'role' => 'staff', 'phone' => '+63 917 200 2001', 'position' => 'Receptionist',
-    ],
-    'patient' => [
-        'id' => 4, 'name' => 'Maria Santos', 'email' => 'maria@example.com',
-        'role' => 'patient', 'phone' => '+63 917 111 1111',
-    ],
-];
-
-// Allow URL ?role=... to switch the active mock user.
-$requestedRole = $_GET['role'] ?? null;
-if ($requestedRole && isset($mockUsers[$requestedRole])) {
-    App\Core\Auth::login($mockUsers[$requestedRole]);
-} elseif (!App\Core\Auth::check()) {
-    App\Core\Auth::login($mockUsers['admin']);
-}

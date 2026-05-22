@@ -15,7 +15,7 @@ class DashboardController extends Controller
         // overview; doctor/staff/patient see focused, role-scoped variants.
         $views = [
             'admin'   => 'dashboard/admin',
-            'doctor'  => 'dashboard/doctor',
+            'dentist' => 'dashboard/doctor',
             'staff'   => 'dashboard/staff',
             'patient' => 'dashboard/patient',
         ];

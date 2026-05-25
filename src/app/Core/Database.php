@@ -14,7 +14,7 @@ class Database
     {
         if (self::$pdo instanceof PDO) return self::$pdo;
 
-        $cfg = require BASE_PATH . '/config/database.php';
+        $cfg = require SRC_PATH . '/config/database.php';
         $dsn = "mysql:host={$cfg['host']};port={$cfg['port']};dbname={$cfg['database']};charset={$cfg['charset']}";
 
         try {

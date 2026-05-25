@@ -56,7 +56,7 @@ if (!function_exists('config')) {
         static $cache = [];
         [$file, $rest] = array_pad(explode('.', $key, 2), 2, null);
         if (!isset($cache[$file])) {
-            $path = BASE_PATH . "/config/{$file}.php";
+            $path = SRC_PATH . "/config/{$file}.php";
             $cache[$file] = is_file($path) ? require $path : [];
         }
         if ($rest === null) return $cache[$file];

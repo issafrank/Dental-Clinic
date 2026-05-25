@@ -25,14 +25,14 @@ spl_autoload_register(function (string $class): void {
     $prefix = 'App\\';
     if (!str_starts_with($class, $prefix)) return;
     $relative = substr($class, strlen($prefix));
-    $file = BASE_PATH . '/app/' . str_replace('\\', '/', $relative) . '.php';
+    $file = SRC_PATH . '/app/' . str_replace('\\', '/', $relative) . '.php';
     if (is_file($file)) require $file;
 });
 
 // --- Helpers ---------------------------------------------------------------
-require BASE_PATH . '/app/Helpers/functions.php';
-require BASE_PATH . '/app/Helpers/dates.php';
-require BASE_PATH . '/app/Helpers/mock_data.php';
+require SRC_PATH . '/app/Helpers/functions.php';
+require SRC_PATH . '/app/Helpers/dates.php';
+require SRC_PATH . '/app/Helpers/mock_data.php';
 
 // --- Session ---------------------------------------------------------------
 App\Core\Session::start();

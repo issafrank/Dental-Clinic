@@ -2,11 +2,12 @@
 declare(strict_types=1);
 
 define('BASE_PATH', dirname(__DIR__));
+define('SRC_PATH', BASE_PATH . '/src');
 
-require BASE_PATH . '/app/Core/bootstrap.php';
+require SRC_PATH . '/app/Core/bootstrap.php';
 
 $router = new App\Core\Router();
-require BASE_PATH . '/config/routes.php';
+require SRC_PATH . '/config/routes.php';
 
 $router->dispatch(
     $_SERVER['REQUEST_METHOD'] ?? 'GET',

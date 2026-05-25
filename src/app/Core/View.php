@@ -9,7 +9,7 @@ class View
     {
         extract($data, EXTR_SKIP);
 
-        $viewPath = BASE_PATH . '/app/Views/' . str_replace('.', '/', $view) . '.php';
+        $viewPath = SRC_PATH . '/app/Views/' . str_replace('.', '/', $view) . '.php';
         if (!is_file($viewPath)) {
             http_response_code(500);
             exit("View not found: $view");
@@ -24,7 +24,7 @@ class View
             return;
         }
 
-        $layoutPath = BASE_PATH . '/app/Views/layouts/' . $layout . '.php';
+        $layoutPath = SRC_PATH . '/app/Views/layouts/' . $layout . '.php';
         if (!is_file($layoutPath)) {
             echo $content;
             return;
@@ -34,7 +34,7 @@ class View
 
     public static function partial(string $__partial, array $data = []): void
     {
-        $__path = BASE_PATH . '/app/Views/partials/' . $__partial . '.php';
+        $__path = SRC_PATH . '/app/Views/partials/' . $__partial . '.php';
         if (!is_file($__path)) return;
         extract($data, EXTR_OVERWRITE);
         require $__path;
